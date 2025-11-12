@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="author" content="Estrela de Minas">
+    <title>Temperos Variados - Estrela de Minas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        /* Product card hover effect */
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Modal transitions */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 300ms ease-out;
+        }
+        .modal-leave-active {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 200ms ease-in;
+        }
+        
+        /* Floating cart button pulse */
+        .pulse-shadow {
+            box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 12px rgba(22, 163, 74, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+            }
+        }
+        
+        /* Simple toast notification for 'Added to cart' */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 100;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 30px;
+            font-size: 17px;
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+        }
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header / Hero Section -->
+    <header class="bg-gray-900 shadow-lg relative overflow-hidden">
+        <!-- Botão Voltar -->
+        <a href="index.html" class="absolute top-4 left-4 z-10 flex items-center text-sm text-amber-400 hover:text-amber-300 transition-colors font-medium">
+            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            Voltar
+        </a>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <!-- Logo and Title -->
+                <div class="flex items-center gap-4 text-center md:text-left">
+                    <img 
+                        id="logo-img"
+                        src="https://placehold.co/100x100/1F2937/EAB308?text=Logo" 
+                        alt="Logo Estrela de Minas" 
+                        class="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-amber-400 object-cover"
+                        onerror="this.src='https://placehold.co/100x100/1F2937/EAB308?text=Logo'"
+                    >
+                    <!-- Instrução: Substitua a URL do 'src' acima pela URL do seu logo hospedado -->
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-bold text-amber-400">Estrela de Minas</h1>
+                        <p class="text-lg md:text-xl text-gray-300 mt-1">Temperos e Especiarias Premium</p>
+                    </div>
+                </div>
+                <!-- Slogan -->
+                <div class="mt-6 md:mt-0">
+                    <p class="text-xl md:text-2xl font-medium text-white italic text-center md:text-right">
+                        "Muito mais sabor na sua mesa"
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner B2B -->
+    <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white py-4 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div>
+                        <p class="font-bold text-lg">Venda Atacadista</p>
+                        <p class="text-sm text-amber-100">Pedido Mínimo: R$ 250 • Nota Fiscal • Pagamento Facilitado</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 text-sm">
+                    <div class="text-center">
+                        <p class="font-bold text-2xl">50+</p>
+                        <p class="text-amber-100">Produtos</p>
+                    </div>
+                    <div class="text-center border-l border-amber-400 pl-4">
+                        <p class="font-bold text-2xl">24h</p>
+                        <p class="text-amber-100">Entrega*</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div id="product-catalog">
+            <!-- As seções de produtos serão renderizadas aqui pelo JavaScript -->
+        </div>
+    </main>
+
+    <!-- Floating Cart Button -->
+    <button onclick="toggleCartModal(true)" class="pulse-shadow fixed bottom-6 right-6 bg-green-600 text-white rounded-full p-4 shadow-xl transition-transform hover:scale-105">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span id="cart-count-badge" class="hidden absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center">0</span>
+    </button>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            
+            <!-- Modal Overlay -->
+            <div id="modal-overlay" class="fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="toggleCartModal(false)"></div>
+
+            <!-- Modal Content -->
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div id="modal-content" class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <!-- Modal Header -->
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-gray-200">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-2xl leading-6 font-bold text-gray-900" id="modal-title">
+                                Meu Pedido
+                            </h3>
+                            <p class="text-sm text-gray-500">Revise seu pedido antes de enviar.</p>
+                        </div>
+                        <button onclick="toggleCartModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Modal Body (Cart Items) -->
+                <div class="px-6 py-4 max-h-80 overflow-y-auto" id="cart-items">
+                    <!-- Cart items will be rendered here -->
+                    <p class="text-gray-500 text-center">Seu carrinho está vazio.</p>
+                </div>
+                
+                <!-- Modal Footer -->
+                <div class="p-6 bg-gray-50 border-t border-gray-200 rounded-b-lg">
+                    <!-- Barra de Progresso Pedido Mínimo -->
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm text-gray-600 mb-2">
+                            <span>Pedido Mínimo: R$ 250</span>
+                            <span id="pedido-progresso-texto">Faltam R$ 250,00</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                            <div id="pedido-progresso-barra" class="bg-gradient-to-r from-amber-400 to-amber-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xl font-medium text-gray-600">Total:</span>
+                        <span id="cart-total" class="text-3xl font-bold text-gray-900">R$ 0,00</span>
+                    </div>
+                
+                    <button id="checkout-button" onclick="sendWhatsAppOrder()" class="w-full bg-green-500 hover:bg-green-600 text-white text-lg font-bold py-4 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="mr-3"><path d="M.057 22.114l1.687-6.163c-1.041-1.804-1.598-3.842-1.598-5.946C.146 5.348 4.898.6 10.942.6c5.996 0 10.79 4.748 10.79 10.557 0 5.808-4.794 10.557-10.79 10.557-1.99 0-3.856-.547-5.507-1.558L.057 22.114zM5.095 19.33l.36.213c1.52 1.011 3.261 1.55 5.094 1.55 4.832 0 8.78-3.88 8.78-8.662 0-4.783-3.948-8.662-8.78-8.662-4.832 0-8.78 3.879-8.78 8.662 0 2.06.68 3.999 1.826 5.59l.233.325-1.168 4.266 4.382-1.15z"></path></svg>
+                        <span id="checkout-button-text">Finalizar Pedido via WhatsApp</span>
+                    </button>
+                    <p id="pedido-minimo-aviso" class="text-sm text-red-600 text-center mt-2 hidden font-medium">
+                        ⚠️ Adicione mais R$ <span id="valor-faltante">250,00</span> para atingir o pedido mínimo
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast">Item adicionado ao carrinho!</div>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold text-amber-400 mb-3">Estrela de Minas</h3>
+                    <p class="text-sm text-gray-300 mb-2">Fornecedor atacadista de temperos e especiarias</p>
+                    <p class="text-sm text-gray-400">
+                        CNPJ: XX.XXX.XXX/XXXX-XX<br>
+                        Desde 20XX
+                    </p>
+                </div>
+                            
+                <div>
+                    <h3 class="text-lg font-bold text-amber-400 mb-3">Contato</h3>
+                    <p class="text-sm text-gray-300 mb-2">
+                        📱 WhatsApp: (11) 94267-1402<br>
+                        ⏰ Seg-Sex: 8h-18h | Sáb: 8h-14h
+                    </p>
+                </div>
+                            
+                <div>
+                    <h3 class="text-lg font-bold text-amber-400 mb-3">Condições Comerciais</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>✓ Pedido mínimo: R$ 250</li>
+                        <li>✓ Nota fiscal em todos os pedidos</li>
+                        <li>✓ Entrega em até 24h*</li>
+                        <li>✓ Pagamento: À vista ou parcelado</li>
+                    </ul>
+                </div>
+            </div>
+                    
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2025 QuantumEra. Todos os direitos reservados.</p>
+                <p class="mt-2 text-xs">* Consulte área de cobertura • Produtos Estrela de Minas</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script>
+        const WHATSAPP_NUMBER = "5511942671402"; // Número com código do país (55) + DDD + Número
+
+        // Base de dados de produtos
+        const productData = [
+            {
+                category: "🌿 TEMPEROS PRONTOS",
+                icon: "🌿",
+                items: [
+                    { id: "ana-maria-defumado", name: "Ana Maria Defumado", price: 23 },
+                    { id: "ana-maria-carnes", name: "Ana Maria Carnes", price: 23 },
+                    { id: "edu-flocos", name: "Edu Flocos", price: 33 },
+                    { id: "edu-branco", name: "Edu Branco", price: 33 },
+                    { id: "edu-defumado", name: "Edu Defumado", price: 33 },
+                ]
+            },
+            {
+                category: "🔥 LINHA CHIMI",
+                icon: "🔥",
+                items: [
+                    { id: "chimi-tradicional", name: "Chimichurri Tradicional", price: 35 },
+                    { id: "chimi-defumado", name: "Chimi Defumado", price: 35 },
+                    { id: "chimi-galleto", name: "Chimi Galleto", price: 35 },
+                ]
+            },
+            {
+                category: "🧄 AROMÁTICOS",
+                icon: "🧄",
+                items: [
+                    { id: "tempero-feijao", name: "Tempero para Feijão", price: 33 },
+                    { id: "alho-salsa-cebola", name: "Alho, Salsa e Cebola", price: 35 },
+                    { id: "mix-bacon-alho", name: "Mix Bacon + Alho, Cebola, Salsa", price: 35 },
+                    { id: "alho-frito", name: "Alho Frito", price: 35 },
+                    { id: "alho-granulado", name: "Alho Granulado", price: 35 },
+                    { id: "salsa", name: "Salsa", price: 27 },
+                ]
+            },
+            {
+                category: "🌱 ERVAS NATURAIS",
+                icon: "🌱",
+                items: [
+                    { id: "oregano", name: "Orégano", price: 43 },
+                    { id: "manjericao", name: "Manjericão", price: 23 },
+                    { id: "alecrim", name: "Alecrim", price: 23 },
+                    { id: "tomilho", name: "Tomilho", price: 23 },
+                    { id: "manjerona", name: "Manjerona", price: 23 },
+                ]
+            },
+            {
+                category: "✨ ESPECIARIAS PREMIUM",
+                icon: "✨",
+                items: [
+                    { id: "curcuma-pura", name: "Cúrcuma Pura", price: 43 },
+                    { id: "canela-casca", name: "Canela em Casca", price: 73 },
+                    { id: "cravo", name: "Cravo", price: 73 },
+                    { id: "canela-po-pura", name: "Canela em Pó Pura", price: 33 },
+                ]
+            },
+            {
+                category: "🌶️ PIMENTAS",
+                icon: "🌶️",
+                items: [
+                    { id: "paprica-defumada", name: "Páprica Defumada", price: 23 },
+                    { id: "paprica-doce", name: "Páprica Doce", price: 23 },
+                    { id: "paprica-picante", name: "Páprica Picante", price: 23 },
+                ]
+            },
+            {
+                category: "🍋 CÍTRICOS",
+                icon: "🍋",
+                items: [
+                    { id: "limao-ervas", name: "Limão e Ervas", price: 39 },
+                    { id: "limao-siciliano", name: "Limão Siciliano", price: 39 },
+                    { id: "lemon-pepper", name: "Lemon Pepper", price: 33 },
+                ]
+            },
+            {
+                category: "🎯 ESPECIAIS DA CASA",
+                icon: "🎯",
+                items: [
+                    { id: "pega-marido", name: "Pega Marido", price: 33 },
+                    { id: "pega-esposa", name: "Pega Esposa", price: 35 },
+                    { id: "gaucho", name: "Gaúcho", price: 35 },
+                    { id: "gourmet-quality", name: "Gourmet Quality", price: 37 },
+                    { id: "explosao", name: "Explosão", price: 33 },
+                    { id: "meu-segredo", name: "Meu Segredo", price: 33 },
+                    { id: "maravilhoso", name: "Maravilhoso", price: 33 },
+                    { id: "vinagrete", name: "Vinagrete", price: 37 },
+                ]
+            },
+            {
+                category: "👨‍🍳 LINHA PROFISSIONAL",
+                icon: "👨‍🍳",
+                items: [
+                    { id: "molho-tartaro", name: "Molho Tártaro", price: 35 },
+                    { id: "tempero-chefe", name: "Tempero do Chefe", price: 35 },
+                    { id: "master-chef", name: "Master Chef", price: 35 },
+                    { id: "recheio-carne", name: "Recheio de Carne", price: 35 },
+                    { id: "recheio-frango", name: "Recheio de Frango", price: 35 },
+                    { id: "tempera-tudo-branco", name: "Tempera Tudo Branco", price: 33 },
+                    { id: "tempera-tudo-vermelho", name: "Tempera Tudo Vermelho", price: 23 },
+                ]
+            }
+        ];
+
+        // Mapeamento de produtos por ID para acesso rápido
+        const productsById = productData.reduce((acc, category) => {
+            category.items.forEach(item => {
+                acc[item.id] = { ...item, category: category.category };
+            });
+            return acc;
+        }, {});
+
+        // Estado do carrinho
+        let cart = {};
+
+        /** Formata um número como moeda BRL */
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+            }).format(value);
+        }
+
+        /** Renderiza o catálogo de produtos na página */
+        function renderProducts() {
+            const catalogContainer = document.getElementById('product-catalog');
+            catalogContainer.innerHTML = ''; // Limpa o container
+
+            productData.forEach(category => {
+                // Cria o cabeçalho da categoria
+                const categoryHeader = document.createElement('div');
+                categoryHeader.className = 'flex items-center mt-10 mb-6';
+                categoryHeader.innerHTML = `
+                    <span class="text-3xl mr-3">${category.icon}</span>
+                    <h2 class="text-3xl font-bold text-gray-800">${category.category}</h2>
+                    <div class="flex-grow border-t border-gray-300 ml-4"></div>
+                `;
+                catalogContainer.appendChild(categoryHeader);
+
+                // Cria o grid de produtos
+                const grid = document.createElement('div');
+                grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+
+                // Adiciona produtos ao grid
+                category.items.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300';
+                    productCard.innerHTML = `
+                        <div class="p-5">
+                            <!-- Placeholder da Imagem -->
+                            <div class="w-full h-40 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 mb-4">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <!-- <img src="URL_DA_FOTO_AQUI" alt="${product.name}" class="w-full h-full object-cover"> -->
+                            </div>
+                            
+                            <h3 class="text-xl font-bold text-gray-800 truncate">${product.name}</h3>
+                            <p class="text-2xl font-black text-amber-600 mt-2">${formatCurrency(product.price)}<span class="text-sm font-medium text-gray-500"> / kg</span></p>
+                            
+                            <div class="mt-5 flex items-center gap-3">
+                                <!-- Controles de Quantidade -->
+                                <div class="flex items-center border border-gray-300 rounded-lg">
+                                    <button onclick="updateQuantity('${product.id}', -1)" class="px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-l-lg text-xl font-bold">
+                                        &minus;
+                                    </button>
+                                    <input 
+                                        type="number" 
+                                        id="qty-${product.id}" 
+                                        class="w-16 text-center border-0 border-l border-r border-gray-300 text-lg font-bold text-gray-800" 
+                                        value="1" 
+                                        min="1" 
+                                        step="1"
+                                        onchange="validateQuantity('${product.id}')"
+                                    >
+                                    <button onclick="updateQuantity('${product.id}', 1)" class="px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-r-lg text-xl font-bold">
+                                        &plus;
+                                    </button>
+                                </div>
+                                
+                                <!-- Botão Adicionar -->
+                                <button onclick="addToCart('${product.id}')" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l.21-2H12a1 1 0 00.93-.64l3.5-7A1 1 0 0015 3H4.218l-.358-1.432A1 1 0 003 1zM5.62 5h8.77l-2.5 5H8.12L5.62 5zM8 16a2 2 0 11-4 0 2 2 0 014 0zM15 16a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(productCard);
+                });
+
+                catalogContainer.appendChild(grid);
+            });
+        }
+
+        /** Atualiza a quantidade no input (botões + e -) */
+        function updateQuantity(productId, delta) {
+            const input = document.getElementById(`qty-${productId}`);
+            if (!input) return;
+            
+            let currentValue = parseInt(input.value, 10);
+            if (isNaN(currentValue)) currentValue = 1;
+            
+            let newValue = currentValue + delta;
+            
+            if (newValue < 1) {
+                newValue = 1; // Mínimo de 1 kg
+            }
+            
+            input.value = newValue;
+        }
+
+        /** Valida a quantidade no input (ao digitar) */
+        function validateQuantity(productId) {
+            const input = document.getElementById(`qty-${productId}`);
+            if (!input) return;
+            
+            let value = parseInt(input.value, 10);
+            if (isNaN(value) || value < 1) {
+                input.value = 1; // Garante o mínimo de 1 kg
+            } else {
+                input.value = value; // Garante que é um número inteiro
+            }
+        }
+
+        /** Adiciona um item ao carrinho */
+        function addToCart(productId) {
+            const product = productsById[productId];
+            if (!product) return;
+
+            const qtyInput = document.getElementById(`qty-${productId}`);
+            const quantity = parseInt(qtyInput.value, 10);
+
+            if (isNaN(quantity) || quantity < 1) {
+                alert("Por favor, insira uma quantidade válida (mínimo 1 kg).");
+                return;
+            }
+
+            if (cart[productId]) {
+                // Se já existe, soma a quantidade
+                cart[productId].quantity += quantity;
+            } else {
+                // Se é novo, adiciona
+                cart[productId] = {
+                    product: product,
+                    quantity: quantity
+                };
+            }
+
+            updateCart();
+            showToast();
+            qtyInput.value = 1; // Reseta o input para 1kg
+        }
+
+        /** Mostra notificação 'Adicionado ao carrinho' */
+        function showToast() {
+            const toast = document.getElementById("toast");
+            toast.className = "show";
+            setTimeout(() => {
+                toast.className = toast.className.replace("show", "");
+            }, 3000); // Mostra por 3 segundos
+        }
+
+        /** Atualiza a UI do carrinho (modal e badge) */
+        function updateCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalEl = document.getElementById('cart-total');
+            const cartCountBadge = document.getElementById('cart-count-badge');
+            
+            let total = 0;
+            let itemCount = 0;
+            
+            if (Object.keys(cart).length === 0) {
+                cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center">Seu carrinho está vazio.</p>';
+            } else {
+                cartItemsContainer.innerHTML = ''; // Limpa o carrinho
+                Object.values(cart).forEach(item => {
+                    const { product, quantity } = item;
+                    const subtotal = product.price * quantity;
+                    total += subtotal;
+                    itemCount += quantity;
+                    
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'flex items-center justify-between py-4 border-b border-gray-200 last:border-b-0';
+                    itemEl.innerHTML = `
+                        <div class="flex-1">
+                            <p class="font-bold text-gray-800">${product.name}</p>
+                            <p class="text-sm text-gray-600">${quantity} kg × ${formatCurrency(product.price)}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-lg text-gray-900">${formatCurrency(subtotal)}</p>
+                            <button onclick="removeFromCart('${product.id}')" class="text-sm text-red-500 hover:text-red-700 transition-colors">
+                                Remover
+                            </button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemEl);
+                });
+            }
+            
+            cartTotalEl.textContent = formatCurrency(total);
+            
+            // Atualiza o badge flutuante
+            if (itemCount > 0) {
+                cartCountBadge.textContent = itemCount;
+                cartCountBadge.classList.remove('hidden');
+            } else {
+                cartCountBadge.classList.add('hidden');
+            }
+
+            // Atualiza barra de progresso do pedido mínimo
+            updatePedidoMinimo(total);
+        }
+
+        /** Remove um item do carrinho */
+        function removeFromCart(productId) {
+            delete cart[productId];
+            updateCart();
+        }
+
+        /** Abre ou fecha o modal do carrinho */
+        function toggleCartModal(open) {
+            const modal = document.getElementById('cart-modal');
+            const content = document.getElementById('modal-content');
+            
+            if (open) {
+                modal.classList.remove('hidden');
+                // Adiciona classes para animação de entrada
+                content.classList.add('modal-enter-active');
+                content.classList.remove('modal-enter');
+            } else {
+                // Adiciona classes para animação de saída
+                content.classList.add('modal-leave-active');
+                content.classList.remove('modal-enter-active');
+                
+                // Espera a animação terminar para esconder o modal
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    content.classList.remove('modal-leave-active');
+                    // Reseta para a entrada
+                    content.classList.add('modal-enter');
+                }, 300); // Duração da animação
+            }
+        }
+        
+        // Reseta o estado inicial da animação do modal
+        document.getElementById('modal-content').classList.add('modal-enter');
+
+
+        /** Atualiza a barra de progresso e o status do pedido mínimo */
+        function updatePedidoMinimo(total) {
+            const PEDIDO_MINIMO = 250;
+            const progressoTexto = document.getElementById('pedido-progresso-texto');
+            const progressoBarra = document.getElementById('pedido-progresso-barra');
+            const checkoutBtn = document.getElementById('checkout-button');
+            const avisoMinimo = document.getElementById('pedido-minimo-aviso');
+            const valorFaltante = document.getElementById('valor-faltante');
+        
+            const porcentagem = Math.min((total / PEDIDO_MINIMO) * 100, 100);
+            progressoBarra.style.width = `${porcentagem}%`;
+        
+            if (total >= PEDIDO_MINIMO) {
+                progressoTexto.textContent = '✅ Pedido mínimo atingido!';
+                progressoTexto.classList.add('text-green-600', 'font-bold');
+                progressoTexto.classList.remove('text-gray-600');
+                checkoutBtn.disabled = false;
+                avisoMinimo.classList.add('hidden');
+            } else {
+                const faltante = PEDIDO_MINIMO - total;
+                progressoTexto.textContent = `Faltam ${formatCurrency(faltante)}`;
+                progressoTexto.classList.remove('text-green-600', 'font-bold');
+                progressoTexto.classList.add('text-gray-600');
+                checkoutBtn.disabled = true;
+                avisoMinimo.classList.remove('hidden');
+                valorFaltante.textContent = formatCurrency(faltante).replace('R$ ', '');
+            }
+        }
+
+        /** Gera a mensagem e envia para o WhatsApp */
+        function sendWhatsAppOrder() {
+            if (Object.keys(cart).length === 0) {
+                // Em vez de alert(), podemos destacar o aviso
+                const avisoMinimo = document.getElementById('pedido-minimo-aviso');
+                avisoMinimo.textContent = "Seu carrinho está vazio!";
+                avisoMinimo.classList.remove('hidden');
+                setTimeout(() => { updatePedidoMinimo(0); }, 3000); // Reseta
+                return;
+            }
+
+            let message = "Olá, *Estrela de Minas*! 🌟\n\n";
+            message += "Gostaria de fazer o seguinte pedido:\n\n";
+            
+            let total = 0;
+            Object.values(cart).forEach(item => {
+                const { product, quantity } = item;
+                const subtotal = product.price * quantity;
+                total += subtotal;
+                message += `• *${product.name}*\n`;
+                message += `  ${quantity} kg × ${formatCurrency(product.price)} = ${formatCurrency(subtotal)}\n\n`;
+            });
+            
+            const PEDIDO_MINIMO = 250;
+            if (total < PEDIDO_MINIMO) {
+                // Mostra o aviso no modal
+                const avisoMinimo = document.getElementById('pedido-minimo-aviso');
+                avisoMinimo.classList.remove('hidden');
+                // Faz o aviso piscar em vermelho
+                avisoMinimo.classList.add('scale-110', 'text-red-700');
+                setTimeout(() => {
+                    avisoMinimo.classList.remove('scale-110', 'text-red-700');
+                }, 500);
+                return;
+            }
+            
+            message += `━━━━━━━━━━━━━━━━━━\n`;
+            message += `*TOTAL: ${formatCurrency(total)}*\n`;
+            message += `━━━━━━━━━━━━━━━━━━\n\n`;
+            message += `📋 *Dados para faturamento:*\n`;
+            message += `• Razão Social:\n`;
+            message += `• CNPJ:\n`;
+            message += `• Endereço de entrega:\n`;
+            message += `• Forma de pagamento:\n\n`;
+            message += `Aguardo confirmação. Obrigado!`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+
+        // Inicializa a aplicação quando o DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            updateCart(); // Para inicializar a barra de progresso e o total
+        });
+
+    </script>
+</body>
+</html>

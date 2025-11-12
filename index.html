@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Estrela de Minas">
+    <title>Estrela de Minas - Catálogo Atacadista</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        /* Efeito de hover no card */
+        .catalog-card {
+            transition: all 0.3s ease-in-out;
+        }
+        .catalog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- 1. HEADER -->
+    <header class="bg-[#1F2937] shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <!-- Logo e Título -->
+                <div class="flex items-center gap-4 text-center md:text-left">
+                    <img 
+                        src="https://placehold.co/100x100/1F2937/EAB308?text=Logo" 
+                        alt="Logo Estrela de Minas" 
+                        class="w-24 h-24 rounded-full border-4 border-[#EAB308] object-cover"
+                    >
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-bold text-[#EAB308]">Estrela de Minas</h1>
+                        <p class="text-lg text-gray-300 mt-1">Temperos e Especiarias Premium</p>
+                    </div>
+                </div>
+                <!-- Slogan -->
+                <div class="mt-4 md:mt-0">
+                    <p class="text-xl font-medium text-white italic text-center md:text-right">
+                        "Muito mais sabor na sua mesa"
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. BANNER INFORMATIVO -->
+    <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white py-4 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <!-- Info Principal -->
+                <div class="flex items-center gap-3">
+                    <svg class="w-8 h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div>
+                        <p class="font-bold text-lg">Venda Atacadista</p>
+                        <p class="text-sm text-amber-100">Pedido Mínimo: R$ 250 • Nota Fiscal • Pagamento Facilitado</p>
+                    </div>
+                </div>
+                <!-- Badges -->
+                <div class="flex gap-4 text-sm">
+                    <div class="text-center">
+                        <p class="font-bold text-2xl">50+</p>
+                        <p class="text-amber-100">Produtos</p>
+                    </div>
+                    <div class="text-center border-l border-amber-400 pl-4">
+                        <p class="font-bold text-2xl">24h</p>
+                        <p class="text-amber-100">Entrega*</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. SEÇÃO PRINCIPAL (Cards) -->
+    <main class="bg-gray-50 py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Título da Seção -->
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
+                    📦 Escolha seu Catálogo
+                </h2>
+                <p class="text-lg text-gray-600 mt-2">
+                    Selecione a categoria de produtos que deseja visualizar
+                </p>
+            </div>
+
+            <!-- Grid de Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                
+                <!-- CARD 1: COLORAU -->
+                <a href="colorau.html" class="catalog-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col items-center text-center p-8 md:p-10 hover:shadow-xl">
+                    <span class="text-6xl mb-4">🟡</span>
+                    <h3 class="text-2xl font-bold text-gray-900">Colorau & Coloral</h3>
+                    <p class="text-gray-600 mt-2">7 variedades • Embalagens de 1kg, 5kg e 10kg</p>
+                    <p class="text-xl font-bold text-amber-600 mt-4">A partir de R$ 8,00/kg</p>
+                    <div class="mt-6 w-full">
+                        <span class="w-full inline-block bg-[#EAB308] hover:bg-amber-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300">
+                            VER CATÁLOGO COLORAU
+                        </span>
+                    </div>
+                </a>
+
+                <!-- CARD 2: TEMPEROS VARIADOS -->
+                <a href="temperos.html" class="catalog-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col items-center text-center p-8 md:p-10 hover:shadow-xl">
+                    <span class="text-6xl mb-4">🌿</span>
+                    <h3 class="text-2xl font-bold text-gray-900">Temperos Variados</h3>
+                    <p class="text-gray-600 mt-2">Mais de 45 produtos • 10 categorias</p>
+                    <p class="text-xl font-bold text-amber-600 mt-4">A partir de R$ 13,00/kg</p>
+                    <div class="mt-6 w-full">
+                        <span class="w-full inline-block bg-[#EAB308] hover:bg-amber-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300">
+                            VER CATÁLOGO TEMPEROS
+                        </span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- 4. SEÇÃO DIFERENCIAIS -->
+    <section class="bg-white py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <!-- Coluna 1 -->
+                <div>
+                    <span class="text-5xl">📋</span>
+                    <h4 class="text-xl font-bold text-gray-900 mt-3">Nota Fiscal</h4>
+                    <p class="text-gray-600 mt-2">Garantia, transparência e segurança total em todos os seus pedidos.</p>
+                </div>
+                <!-- Coluna 2 -->
+                <div>
+                    <span class="text-5xl">🚚</span>
+                    <h4 class="text-xl font-bold text-gray-900 mt-3">Entrega Rápida</h4>
+                    <p class="text-gray-600 mt-2">Receba seus produtos em até 24h (*consulte sua área de cobertura).</p>
+                </div>
+                <!-- Coluna 3 -->
+                <div>
+                    <span class="text-5xl">💳</span>
+                    <h4 class="text-xl font-bold text-gray-900 mt-3">Pagamento Facilitado</h4>
+                    <p class="text-gray-600 mt-2">Condições flexíveis e facilitadas para impulsionar o seu negócio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. FOOTER -->
+    <footer class="bg-[#1F2937] text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Coluna 1 -->
+                <div>
+                    <h3 class="text-lg font-bold text-[#EAB308] mb-3">Estrela de Minas</h3>
+                    <p class="text-sm text-gray-300">
+                        Fornecedor atacadista de temperos e especiarias.
+                    </p>
+                </div>
+                <!-- Coluna 2 -->
+                <div>
+                    <h3 class="text-lg font-bold text-[#EAB308] mb-3">Contato</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        📱 WhatsApp: (11) 94267-1402<br>
+                        ⏰ Seg-Sex: 8h-18h | Sáb: 8h-13h
+                    </p>
+                </div>
+                <!-- Coluna 3 -->
+                <div>
+                    <h3 class="text-lg font-bold text-[#EAB308] mb-3">Condições</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>✓ Pedido mínimo: R$ 250</li>
+                        <li>✓ Nota fiscal em todos os pedidos</li>
+                        <li>✓ Entrega em até 24h*</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Copyright -->
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2025 Estrela de Minas. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
